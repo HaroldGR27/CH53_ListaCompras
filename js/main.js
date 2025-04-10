@@ -1,6 +1,7 @@
 let txtName = document.getElementById("Name");
 let txtNumber = document.getElementById("Number");
 let btnAgregar = document.getElementById("btnAgregar");
+let btnClear = document.getElementById("btnClear");
 let alerValidacionesTexto = document.getElementById("alertValidacionesTexto");
 let alertValidaciones = document.getElementById("alertValidaciones");
 let tablaListaCompras = document.getElementById("tablaListaCompras");
@@ -109,30 +110,54 @@ btnAgregar.addEventListener("click", function (event) {
 
 });//btnAgregar
 
-window.addEventListener("load",function(event){
+window.addEventListener("load", function (event) {
     event.preventDefault();
-    if(this.localStorage.getItem("datos")!=null){
-        datos=JSON.parse(this.localStorage.getItem("datos"));
+    if (this.localStorage.getItem("datos") != null) {
+        datos = JSON.parse(this.localStorage.getItem("datos"));
     }//Datos != null
 
-    datos.forEach((d)=>{
+    datos.forEach((d) => {
         let row = `<tr>
                     <td>${d.cont}</td>
                     <td>${d.nombre}</td>
                     <td>${d.cantidad}</td>
                     <td>${d.precio}</td>
                    </tr>`;
-        cuerpoTabla.insertAdjacentHTML("beforeend",row);
+        cuerpoTabla.insertAdjacentHTML("beforeend", row);
     })
 
-    if(this.localStorage.getItem("resumen")!=null){
+    if (this.localStorage.getItem("resumen") != null) {
         let resumen = JSON.parse(this.localStorage.getItem("resumen"));
         costoTotal = resumen.costoTotal;
-        totalEnProductos= resumen.totalEnProductos;
-        cont= resumen.cont;
+        totalEnProductos = resumen.totalEnProductos;
+        cont = resumen.cont;
     }
 
-    precioTotal.innerText = "$ "+ costoTotal.toFixed(2);
-    productosTotal.innerText=totalEnProductos;
-    contadorProductos.innerText=cont;
+    precioTotal.innerText = "$ " + costoTotal.toFixed(2);
+    productosTotal.innerText = totalEnProductos;
+    contadorProductos.innerText = cont;
 });//window.addEvenListener load
+
+//Agregar la funcionalidad del botón Limpiar Todo
+//Resumen
+//Tabla
+//campos
+//alerta
+// localStorage
+
+btnClear.addEventListener("click", function (event) {
+    event.preventDefault();
+
+    
+    txtName.style.border = "";
+    txtNumber.style.border = "";
+    alerValidacionesTexto.innerHTML = "";
+    alertValidaciones.style.display = "none"
+    cont.innerHTML = 0;
+    cuerpoTabla.innerHTML = "";
+    precioTotal.innerHTML = "";
+    productosTotal.innerHTML="";
+    contadorProductos.innerHTML="";
+
+
+});//btnClear addEventListener
