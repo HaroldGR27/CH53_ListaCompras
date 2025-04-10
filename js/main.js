@@ -14,33 +14,34 @@ const precioTotal = document.getElementById("precioTotal");
 let cont = 0;
 let costoTotal = 0;
 let totalEnProductos = 0;
+let datos = new Array(); //almacena los elementos de la tabla
 
 function validadCantidad() {
     if (txtNumber.value.trim().length <= 0) {
         return false;
     }//length<=0
 
-    if(isNaN(txtNumber.value)){
+    if (isNaN(txtNumber.value)) {
         return false;
     }//isNaN
     // número
 
-    if (Number(txtNumber.value)<=0){
+    if (Number(txtNumber.value) <= 0) {
         return false;
     }//<=0
     // Mayor de 0
     return true;
 }//validadCantidad
 
-function getPrecio(){
-    return Math.round(Math.random()*10000)/100;
+function getPrecio() {
+    return Math.round(Math.random() * 10000) / 100;
 }//getPrecio
 
 
 btnAgregar.addEventListener("click", function (event) {
     event.preventDefault();
     //Bandera, al ser true permite agregar los datos a la tabla
-    let isValid=true
+    let isValid = true
 
     alerValidacionesTexto.innerHTML = ""
     alertValidaciones.style.display = "none"
@@ -54,17 +55,17 @@ btnAgregar.addEventListener("click", function (event) {
         txtName.style.border = "solid medium red";
         alerValidacionesTexto.innerHTML = "<strong>El nombre del producto no es correcto.</strong>"
         alertValidaciones.style.display = "block"
-        isValid=false;
+        isValid = false;
     }// lenght>=3
 
     if (!validadCantidad()) {
         txtNumber.style.border = "solid medium red";
         alerValidacionesTexto.innerHTML += "<br/><strong>La cantidad no es correcta.</strong>"
         alertValidaciones.style.display = "block"
-        isValid=false;
+        isValid = false;
     }// validarCantidad
 
-    if(isValid){
+    if (isValid) {
         cont++;
         let precio = getPrecio();
         let row = `<tr>
@@ -73,17 +74,54 @@ btnAgregar.addEventListener("click", function (event) {
                     <td>${txtNumber.value}</td>
                     <td>${precio}</td>
                    </tr>`;
+
+        let elemento = {
+            "cont": cont,
+            "nombre": txtName.value,
+            "cantidad": txtNumber.value,
+            "precio": precio
+        };
+        datos.push(elemento);
+
+        localStorage.setItem("datos", JSON.stringify(datos));
+
         cuerpoTabla.insertAdjacentHTML("beforeend", row);
         costoTotal += precio * Number(txtNumber.value);
-        precioTotal.innerText="$ "+costoTotal.toFixed(2);
+        precioTotal.innerText = "$ " + costoTotal.toFixed(2);
         totalEnProductos += Number(txtNumber.value);
         productosTotal.innerText = totalEnProductos;
-        contadorProductos.innerText=cont;
+        contadorProductos.innerText = cont;
+
+        let resumen = {
+            "cont": cont,
+            "totalEnProductos": totalEnProductos,
+            "costoTotal": costoTotal
+        }
+
+        localStorage.setItem("resumen", JSON.stringify(resumen));
 
 
-        txtName.value="";
-        txtNumber.value="";
+
+        txtName.value = "";
+        txtNumber.value = "";
         txtName.focus();
     }//if isValid
 
 });//btnAgregar
+
+window.addEventListener("load",function(event){
+    event.preventDefault();
+    if(this.localStorage.getItem("datos")!=null){
+        datos=JSON.parse(this.localStorage.getItem("datos"));
+    }//Datos != null
+    if(this.localStorage.getItem("resumen")!=null){
+        let resumen = JSON.parse(this.localStorage.getItem("resumen"));
+        costoTotal = resumen.costoTotal;
+        totalEnProductos= resumen.totalEnProductos;
+        cont= resumen.cont;
+    }
+
+    precioTotal.innerText = "$ "+ costoTotal.toFixed(2);
+    productosTotal.innerText=totalEnProductos;
+    contadorProductos.innerText=cont;
+});//window.addEvenListener load
