@@ -153,11 +153,13 @@ btnClear.addEventListener("click", function (event) {
     txtNumber.style.border = "";
     alerValidacionesTexto.innerHTML = "";
     alertValidaciones.style.display = "none"
-    cont.innerHTML = 0;
     cuerpoTabla.innerHTML = "";
-    precioTotal.innerHTML = "";
-    productosTotal.innerHTML="";
-    contadorProductos.innerHTML="";
+    precioTotal.innerHTML = 0;
+    productosTotal.innerHTML=0;
+    contadorProductos.innerHTML=0;
 
+    localStorage.removeItem("datos", "contadorProductos", "cuerpoTabla","precioTotal","productosTotal",)
+    localStorage.removeItem("resumen");
+    window.location.href = "./index.html";
 
 });//btnClear addEventListener
