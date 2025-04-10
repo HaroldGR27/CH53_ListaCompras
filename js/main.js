@@ -114,6 +114,17 @@ window.addEventListener("load",function(event){
     if(this.localStorage.getItem("datos")!=null){
         datos=JSON.parse(this.localStorage.getItem("datos"));
     }//Datos != null
+
+    datos.forEach((d)=>{
+        let row = `<tr>
+                    <td>${d.cont}</td>
+                    <td>${d.nombre}</td>
+                    <td>${d.cantidad}</td>
+                    <td>${d.precio}</td>
+                   </tr>`;
+        cuerpoTabla.insertAdjacentHTML("beforeend",row);
+    })
+
     if(this.localStorage.getItem("resumen")!=null){
         let resumen = JSON.parse(this.localStorage.getItem("resumen"));
         costoTotal = resumen.costoTotal;
